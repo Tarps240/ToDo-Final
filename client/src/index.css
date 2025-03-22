@@ -1,0 +1,44 @@
+/* Import Tailwind CSS */
+@import 'tailwindcss';
+
+/* Define design tokens and animations */
+@theme {
+    --color-primary: #F2F0EF; 
+    --color-secondary: #BBBDBC;
+    --color-tertiary: #245F73; 
+    --color-quaternary: #733E24;
+    --color-light: #9333EA; /* Purple for gradients */
+    --color-dark: #1C2526; /* Dark grey for gradients */
+    --color-button: #2563EB; /* Blue for buttons/checkboxes */
+    --color-danger: #DC2626;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --font-size-base: 1rem;
+  }
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+  .animate-bounce {
+    animation: bounce 0.5s ease-in-out;
+  }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slideIn {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
