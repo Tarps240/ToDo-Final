@@ -13,7 +13,12 @@ router.post('/register', async (req, res) => {
         await user.save();
 
         const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+        res.cookie('token', token, { 
+            httpOnly: true, 
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 3600000 // 1 hour in milliseconds
+        });
         return res.status(201).json({ message: 'User registered' });
     } catch (error) {
         console.error('Register error:', error);
@@ -30,23 +35,29 @@ router.post('/login', async (req, res) => {
         }
 
         const validPassword = await bcrypt.compare(password, user.password);
-            if (!validPassword) {
+        if (!validPassword) {
             return res.status(400).json({ message: 'Bad Login' });
         }
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.cookie('token', token, {httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-        // console.log('Recieved:', { username, password });
-        // console.log('Found user:', user);
-        // console.log('Password match:', validPassword);
+        res.cookie('token', token, {
+            httpOnly: true, 
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 3600000 // 1 hour in milliseconds
+        });
         return res.status(200).json({ message: 'Logged in successfully' });
-      } catch (error) {
+    } catch (error) {
         return res.status(400).json({ message: error.message });
-      }
+    }
 });
 
 router.post('/logout', (req, res) => {
-    res.clearCookie('token'); // Remove the token cookie
-    return res.json({ message: 'Logged out succesfully!' });
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax'
+    });
+    return res.json({ message: 'Logged out successfully!' });
 });
 
 module.exports = router;

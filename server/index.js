@@ -24,6 +24,7 @@ app.use(cookieParser());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/todos', todoRoutes);
+app.use('/todos', todoRoutes);
 
 // Connect to MongoDB and Start the server.
 mongoose
